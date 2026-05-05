@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>오늘의 할 일</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700;800&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f0f2f8;--card:#fff;--text:#1a1a2e;--sub:#8b8fa8;--border:#eaecf4;
+  --accent:#6c63ff;--shadow:0 4px 24px rgba(108,99,255,.10);--shadow2:0 2px 8px rgba(0,0,0,.06);
+}
+body{font-family:'Pretendard',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.app{max-width:720px;margin:0 auto;padding:32px 16px 160px}
+.hero{background:linear-gradient(135deg,#6c63ff 0%,#a78bfa 60%,#f9a8d4 100%);border-radius:24px;padding:28px;margin-bottom:24px;position:relative;overflow:hidden;box-shadow:0 8px 32px rgba(108,99,255,.25)}
+.hero::before{content:'';position:absolute;right:-30px;top:-30px;width:180px;height:180px;background:rgba(255,255,255,.08);border-radius:50%}
+.hero-date{font-size:13px;color:rgba(255,255,255,.75);margin-bottom:6px;font-weight:500}
+.hero-title{font-size:26px;font-weight:800;color:#fff;margin-bottom:18px;letter-spacing:-.5px}
+.hero-stats{display:flex;gap:16px;flex-wrap:wrap}
+.stat-pill{background:rgba(255,255,255,.18);backdrop-filter:blur(8px);border-radius:12px;padding:10px 16px;flex:1;min-width:100px}
+.stat-pill .val{font-size:22px;font-weight:800;color:#fff}
+.stat-pill .lbl{font-size:11px;color:rgba(255,255,255,.75);margin-top:2px;font-weight:500}
+.hero-bar-bg{margin-top:16px;background:rgba(255,255,255,.2);border-radius:99px;height:6px;overflow:hidden}
+.hero-bar{height:100%;background:#fff;border-radius:99px;transition:width .5s cubic-bezier(.4,0,.2,1)}
+.sec-title{font-size:13px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:1px;margin:28px 0 12px}
+.input-card{background:var(--card);border-radius:20px;padding:20px;margin-bottom:8px;box-shadow:var(--shadow2)}
+.input-row{display:flex;gap:10px;align-items:center;margin-bottom:12px}
+.input-row input{flex:1;border:1.5px solid var(--border);border-radius:12px;padding:10px 14px;font-size:14px;outline:none;font-family:inherit;color:var(--text);transition:border .2s;background:#fafbff}
+.input-row input:focus{border-color:var(--accent)}
+.input-row input::placeholder{color:#c5c8da}
+.input-meta{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.styled-select,.date-input,.company-input{border:1.5px solid var(--border);border-radius:10px;padding:8px 12px;font-size:13px;outline:none;background:#fafbff;color:var(--text);font-family:inherit;transition:border .2s}
+.styled-select:focus,.date-input:focus,.company-input:focus{border-color:var(--accent)}
+.company-input{width:130px}
+.add-btn{background:linear-gradient(135deg,#6c63ff,#a78bfa);color:#fff;border:none;border-radius:12px;padding:10px 20px;font-size:14px;font-weight:700;cursor:pointer;transition:opacity .15s,transform .1s;font-family:inherit;box-shadow:0 4px 12px rgba(108,99,255,.3)}
+.add-btn:hover{opacity:.88;transform:translateY(-1px)}
+.filters{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.filter-btn{border:none;border-radius:20px;padding:7px 16px;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;background:var(--card);color:var(--sub);font-family:inherit;box-shadow:var(--shadow2)}
+.filter-btn.active{background:var(--accent);color:#fff;box-shadow:0 4px 12px rgba(108,99,255,.3)}
+.todo-list{display:flex;flex-direction:column;gap:10px}
+.empty{text-align:center;padding:48px 0;color:var(--sub);font-size:15px;background:var(--card);border-radius:20px;box-shadow:var(--shadow2)}
+.empty p{margin-top:8px;font-size:13px;color:#c5c8da}
+.todo-item{background:var(--card);border-radius:16px;padding:14px 16px;display:flex;align-items:flex-start;gap:12px;box-shadow:var(--shadow2);transition:transform .15s,opacity .3s;border-left:4px solid transparent}
+.todo-item:hover{transform:translateY(-1px);box-shadow:var(--shadow)}
+.todo-item.done{opacity:.5}
+.todo-item.urgent{border-left-color:#ff4757}
+.todo-item.soon{border-left-color:#ffa502}
+.todo-item.normal{border-left-color:var(--border)}
+.check-btn{width:22px;height:22px;border-radius:50%;border:2px solid var(--border);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;margin-top:1px}
+.check-btn.checked{background:var(--accent);border-color:var(--accent)}
+.check-btn.checked::after{content:'';width:5px;height:9px;border:2px solid #fff;border-top:none;border-left:none;transform:rotate(45deg) translateY(-1px);display:block}
+.item-body{flex:1;min-width:0}
+.item-top{margin-bottom:5px}
+.todo-text{font-size:14px;font-weight:600;line-height:1.4;word-break:break-all}
+.done .todo-text{text-decoration:line-through;color:var(--sub)}
+.item-meta{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.cat-badge{font-size:11px;font-weight:700;padding:3px 9px;border-radius:8px}
+.cat-업무{background:#eef3ff;color:#4f8ef7}
+.cat-개인{background:#fff0f5;color:#f76f8e}
+.cat-공부{background:#e8faf5;color:#2eaa87}
+.cat-회의{background:#fff8e1;color:#f9a825}
+.cat-약속{background:#fce4ec;color:#e91e63}
+.company-tag{font-size:11px;font-weight:600;padding:3px 9px;border-radius:8px;background:#f0f0ff;color:#6c63ff}
+.due-tag{font-size:11px;font-weight:600;padding:3px 9px;border-radius:8px}
+.due-urgent{background:#fff0f0;color:#ff4757}
+.due-soon{background:#fff8f0;color:#ffa502}
+.due-ok{background:#f0fff4;color:#2ecc71}
+.due-past{background:#f5f5f5;color:#aaa}
+.item-actions{display:flex;gap:4px;flex-shrink:0}
+.act-btn{border:none;background:none;cursor:pointer;font-size:14px;padding:4px;opacity:.35;transition:opacity .15s;border-radius:6px}
+.act-btn:hover{opacity:1;background:#f5f5f8}
+.edit-input{width:100%;border:none;border-bottom:2px solid var(--accent);outline:none;font-size:14px;font-weight:600;background:transparent;padding:2px 0;font-family:inherit;color:var(--text)}
+.month-card{background:var(--card);border-radius:20px;padding:20px;box-shadow:var(--shadow2);margin-bottom:10px}
+.month-card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.month-nav{display:flex;align-items:center;gap:12px}
+.month-nav-btn{background:none;border:none;cursor:pointer;font-size:18px;color:var(--sub);padding:4px 8px;border-radius:8px;transition:background .15s}
+.month-nav-btn:hover{background:var(--border)}
+.month-label{font-size:16px;font-weight:800}
+.add-month-btn{background:linear-gradient(135deg,#6c63ff,#a78bfa);color:#fff;border:none;border-radius:10px;padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:16px}
+.cal-dow{text-align:center;font-size:11px;font-weight:700;color:var(--sub);padding:4px 0}
+.cal-day{aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:4px 2px;border-radius:10px;cursor:pointer;transition:background .15s}
+.cal-day:hover{background:#f5f4ff}
+.cal-day .day-num{font-size:12px;font-weight:600;line-height:1}
+.cal-day.today .day-num{background:var(--accent);color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.cal-day.other-month .day-num{color:#ccc}
+.cal-day.sun .day-num{color:#ff4757}
+.cal-day.sat .day-num{color:#4f8ef7}
+.cal-day.today.sun .day-num,.cal-day.today.sat .day-num{color:#fff}
+.dot-row{display:flex;gap:2px;margin-top:2px;flex-wrap:wrap;justify-content:center;max-width:32px}
+.dot{width:5px;height:5px;border-radius:50%}
+.month-events{display:flex;flex-direction:column;gap:8px}
+.month-event-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:12px;background:#fafbff;border:1px solid var(--border)}
+.me-date{font-size:12px;font-weight:700;color:var(--sub);width:40px;flex-shrink:0;text-align:center}
+.me-date .md{font-size:16px;font-weight:800;color:var(--text);line-height:1}
+.me-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.me-body{flex:1;min-width:0}
+.me-title{font-size:13px;font-weight:600}
+.me-sub{font-size:11px;color:var(--sub);margin-top:2px}
+.me-del{background:none;border:none;cursor:pointer;font-size:13px;opacity:.3;padding:4px;border-radius:6px;transition:opacity .15s}
+.me-del:hover{opacity:1}
+.no-events{text-align:center;padding:24px;color:var(--sub);font-size:13px}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);backdrop-filter:blur(4px);z-index:100;display:flex;align-items:center;justify-content:center;padding:16px}
+.modal{background:#fff;border-radius:24px;padding:28px;width:100%;max-width:400px;box-shadow:0 20px 60px rgba(0,0,0,.15);animation:fadeUp .2s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.modal h3{font-size:18px;font-weight:800;margin-bottom:20px}
+.modal label{display:block;font-size:12px;font-weight:700;color:var(--sub);margin-bottom:6px;margin-top:14px;text-transform:uppercase;letter-spacing:.5px}
+.modal input,.modal select{width:100%;border:1.5px solid var(--border);border-radius:10px;padding:10px 12px;font-size:14px;font-family:inherit;outline:none;background:#fafbff;color:var(--text)}
+.modal input:focus,.modal select:focus{border-color:var(--accent)}
+.modal-btns{display:flex;gap:10px;margin-top:20px}
+.modal-btns button{flex:1;padding:12px;border-radius:12px;border:none;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit}
+.modal-cancel{background:var(--border);color:var(--sub)}
+.modal-save{background:linear-gradient(135deg,#6c63ff,#a78bfa);color:#fff}
+.ai-bar{position:fixed;bottom:0;left:0;right:0;z-index:200;padding:16px;background:linear-gradient(to top,rgba(240,242,248,1) 60%,rgba(240,242,248,0))}
+.ai-inner{max-width:720px;margin:0 auto;background:#fff;border-radius:20px;box-shadow:0 8px 40px rgba(108,99,255,.2);border:1.5px solid rgba(108,99,255,.15);overflow:hidden}
+.ai-messages{max-height:200px;overflow-y:auto;padding:14px 16px 0;display:flex;flex-direction:column;gap:8px}
+.ai-messages:empty{display:none}
+.ai-msg{padding:10px 14px;border-radius:12px;font-size:13px;line-height:1.5;max-width:85%}
+.ai-msg.user{background:linear-gradient(135deg,#6c63ff,#a78bfa);color:#fff;align-self:flex-end}
+.ai-msg.assistant{background:#f5f4ff;color:var(--text);align-self:flex-start;border:1px solid var(--border)}
+.ai-msg.thinking{background:#f5f4ff;color:var(--sub);align-self:flex-start;font-style:italic}
+.ai-input-row{display:flex;align-items:center;gap:10px;padding:12px 14px}
+.ai-key-area{display:flex;align-items:center;gap:8px;padding:10px 14px;border-top:1px solid var(--border);background:#fafbff}
+.ai-key-area input{flex:1;border:1.5px solid var(--border);border-radius:8px;padding:7px 12px;font-size:12px;font-family:inherit;outline:none;background:#fff;color:var(--text)}
+.ai-key-area input:focus{border-color:var(--accent)}
+.ai-key-label{font-size:11px;color:var(--sub);font-weight:600;white-space:nowrap}
+.ai-key-save{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:7px 12px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit}
+.ai-icon{font-size:20px;flex-shrink:0}
+.ai-text-input{flex:1;border:none;outline:none;font-size:14px;font-family:inherit;color:var(--text);background:transparent}
+.ai-text-input::placeholder{color:#c5c8da}
+.ai-send{background:linear-gradient(135deg,#6c63ff,#a78bfa);color:#fff;border:none;border-radius:10px;padding:8px 16px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;transition:opacity .15s}
+.ai-send:hover{opacity:.85}
+.ai-send:disabled{opacity:.4;cursor:not-allowed}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="hero">
+    <div class="hero-date" id="heroDate"></div>
+    <div class="hero-title">오늘의 할 일 ✨</div>
+    <div class="hero-stats">
+      <div class="stat-pill"><div class="val" id="statTotal">0</div><div class="lbl">전체 할 일</div></div>
+      <div class="stat-pill"><div class="val" id="statDone">0</div><div class="lbl">완료</div></div>
+      <div class="stat-pill"><div class="val" id="statUrgent">0</div><div class="lbl">🔴 긴급</div></div>
+    </div>
+    <div class="hero-bar-bg"><div class="hero-bar" id="heroBar" style="width:0%"></div></div>
+  </div>
+  <div class="sec-title">할 일 추가</div>
+  <div class="input-card">
+    <div class="input-row">
+      <input type="text" id="todoInput" placeholder="새 할 일을 입력하세요..." />
+      <button class="add-btn" onclick="addTodo()">+ 추가</button>
+    </div>
+    <div class="input-meta">
+      <select class="styled-select" id="catSelect" onchange="toggleCompany()">
+        <option value="업무">💼 업무</option>
+        <option value="개인">🏠 개인</option>
+        <option value="공부">📚 공부</option>
+        <option value="회의">📋 회의</option>
+        <option value="약속">🤝 약속</option>
+      </select>
+      <input type="text" class="company-input" id="companyInput" placeholder="회사명" />
+      <input type="date" class="date-input" id="dueInput" />
+    </div>
+  </div>
+  <div class="filters">
+    <button class="filter-btn active" data-cat="전체" onclick="setFilter(this)">전체</button>
+    <button class="filter-btn" data-cat="업무" onclick="setFilter(this)">💼 업무</button>
+    <button class="filter-btn" data-cat="개인" onclick="setFilter(this)">🏠 개인</button>
+    <button class="filter-btn" data-cat="공부" onclick="setFilter(this)">📚 공부</button>
+    <button class="filter-btn" data-cat="회의" onclick="setFilter(this)">📋 회의</button>
+    <button class="filter-btn" data-cat="약속" onclick="setFilter(this)">🤝 약속</button>
+  </div>
+  <div class="todo-list" id="todoList"></div>
+  <div class="sec-title" style="margin-top:36px">월간 일정 📅</div>
+  <div class="month-card">
+    <div class="month-card-header">
+      <div class="month-nav">
+        <button class="month-nav-btn" onclick="changeMonth(-1)">‹</button>
+        <span class="month-label" id="monthLabel"></span>
+        <button class="month-nav-btn" onclick="changeMonth(1)">›</button>
+      </div>
+      <button class="add-month-btn" onclick="openModal()">+ 일정 추가</button>
+    </div>
+    <div class="cal-grid" id="calGrid"></div>
+    <div class="month-events" id="monthEvents"></div>
+  </div>
+</div>
+<div class="modal-overlay" id="modalOverlay" style="display:none" onclick="closeModalOutside(event)">
+  <div class="modal">
+    <h3>📅 월간 일정 추가</h3>
+    <label>제목</label><input type="text" id="mTitle" placeholder="일정 제목" />
+    <label>날짜</label><input type="date" id="mDate" />
+    <label>종류</label>
+    <select id="mCat">
+      <option value="업무">💼 업무</option>
+      <option value="개인">🏠 개인</option>
+      <option value="회의">📋 회의</option>
+      <option value="약속">🤝 약속</option>
+      <option value="공부">📚 공부</option>
+    </select>
+    <label>메모 (선택)</label><input type="text" id="mNote" placeholder="추가 메모" />
+    <div class="modal-btns">
+      <button class="modal-cancel" onclick="closeModal()">취소</button>
+      <button class="modal-save" onclick="saveMonthEvent()">저장</button>
+    </div>
+  </div>
+</div>
+<div class="ai-bar">
+  <div class="ai-inner">
+    <div class="ai-messages" id="aiMessages"></div>
+    <div class="ai-input-row">
+      <span class="ai-icon">🤖</span>
+      <input class="ai-text-input" id="aiInput" placeholder="수정사항을 말씀해 주세요. 예) 다크모드로 바꿔줘 / 글자 크기 키워줘" />
+      <button class="ai-send" id="aiSendBtn" onclick="sendToAI()">전송</button>
+    </div>
+    <div class="ai-key-area" id="aiKeyArea">
+      <span class="ai-key-label">🔑 API Key</span>
+      <input type="password" id="apiKeyInput" placeholder="Anthropic API 키를 입력하세요" />
+      <button class="ai-key-save" onclick="saveApiKey()">저장</button>
+    </div>
+  </div>
+</div>
+<script>
+let todos=JSON.parse(localStorage.getItem('todos_v2')||'[]');
+let events=JSON.parse(localStorage.getItem('events_v2')||'[]');
+let filter='전체',editingId=null;
+const now=new Date();
+let viewYear=now.getFullYear(),viewMonth=now.getMonth();
+const DOW=['일','월','화','수','목','금','토'];
+document.getElementById('heroDate').textContent=now.toLocaleDateString('ko-KR',{year:'numeric',month:'long',day:'numeric'})+' '+DOW[now.getDay()]+'요일';
+function save(){localStorage.setItem('todos_v2',JSON.stringify(todos));}
+function saveEv(){localStorage.setItem('events_v2',JSON.stringify(events));}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function today(){return now.toISOString().slice(0,10);}
+function daysLeft(due){if(!due)return null;return Math.ceil((new Date(due)-new Date(today()))/(864e5));}
+function dueLabel(due){const d=daysLeft(due);if(d===null)return '';if(d<0)return 'D+'+Math.abs(d);if(d===0)return 'D-Day';return 'D-'+d;}
+function dueClass(due){const d=daysLeft(due);if(d===null)return '';if(d<0)return 'due-past';if(d<=1)return 'due-urgent';if(d<=3)return 'due-soon';return 'due-ok';}
+function borderClass(due){const d=daysLeft(due);if(d===null||d>3)return 'normal';if(d<=1)return 'urgent';return 'soon';}
+function urgency(t){if(t.done)return 9999;const d=daysLeft(t.due);if(d===null)return 100;return d;}
+function catColor(cat){return{업무:'#4f8ef7',개인:'#f76f8e',공부:'#43c6ac',회의:'#f9a825',약속:'#e91e63'}[cat]||'#aaa';}
+function toggleCompany(){document.getElementById('companyInput').style.display=document.getElementById('catSelect').value==='업무'?'':'none';}
+toggleCompany();
+function addTodo(){const inp=document.getElementById('todoInput'),text=inp.value.trim();if(!text)return;const cat=document.getElementById('catSelect').value;todos.push({id:Date.now(),text,cat,due:document.getElementById('dueInput').value||null,company:cat==='업무'?(document.getElementById('companyInput').value.trim()||''):'',done:false});inp.value='';document.getElementById('dueInput').value='';save();render();}
+function toggleDone(id){const t=todos.find(t=>t.id===id);if(t){t.done=!t.done;save();render();}}
+function deleteTodo(id){todos=todos.filter(t=>t.id!==id);save();render();}
+function startEdit(id){editingId=id;render();const el=document.getElementById('edit_'+id);if(el){el.focus();el.setSelectionRange(el.value.length,el.value.length);}}
+function saveEdit(id){const el=document.getElementById('edit_'+id);if(!el)return;const v=el.value.trim();if(v){const t=todos.find(t=>t.id===id);if(t)t.text=v;}editingId=null;save();render();}
+function setFilter(btn){document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');filter=btn.dataset.cat;render();}
+function render(){const sorted=[...todos].sort((a,b)=>urgency(a)-urgency(b));const done=todos.filter(t=>t.done).length,total=todos.length,urgent=todos.filter(t=>!t.done&&daysLeft(t.due)!==null&&daysLeft(t.due)<=1).length;document.getElementById('statTotal').textContent=total;document.getElementById('statDone').textContent=done;document.getElementById('statUrgent').textContent=urgent;document.getElementById('heroBar').style.width=(total?Math.round(done/total*100):0)+'%';const filtered=filter==='전체'?sorted:sorted.filter(t=>t.cat===filter);const list=document.getElementById('todoList');if(!filtered.length){list.innerHTML='<div class="empty">🎉<p>할 일이 없어요!</p><p>위에서 새로운 할 일을 추가해 보세요.</p></div>';return;}list.innerHTML=filtered.map(t=>{if(editingId===t.id)return'<div class="todo-item '+borderClass(t.due)+'"><button class="check-btn '+(t.done?'checked':'')+'" onclick="toggleDone('+t.id+')"></button><div class="item-body"><input class="edit-input" id="edit_'+t.id+'" value="'+esc(t.text)+'" onblur="saveEdit('+t.id+')" onkeydown="if(event.key===\'Enter\')saveEdit('+t.id+');if(event.key===\'Escape\'){editingId=null;render();}"/></div></div>';return'<div class="todo-item '+borderClass(t.due)+' '+(t.done?'done':'')+'"><button class="check-btn '+(t.done?'checked':'')+'" onclick="toggleDone('+t.id+')"></button><div class="item-body"><div class="item-top"><span class="todo-text">'+esc(t.text)+'</span></div><div class="item-meta"><span class="cat-badge cat-'+t.cat+'">'+t.cat+'</span>'+(t.company?'<span class="company-tag">🏢 '+esc(t.company)+'</span>':'')+(t.due?'<span class="due-tag '+dueClass(t.due)+'">📅 '+t.due.slice(5).replace('-','/')+' '+dueLabel(t.due)+'</span>':'')+'</div></div><div class="item-actions"><button class="act-btn" onclick="startEdit('+t.id+')">✏️</button><button class="act-btn" onclick="deleteTodo('+t.id+')">🗑️</button></div></div>';}).join('');}
+function changeMonth(d){viewMonth+=d;if(viewMonth>11){viewMonth=0;viewYear++;}if(viewMonth<0){viewMonth=11;viewYear--;}renderCalendar();}
+function renderCalendar(){document.getElementById('monthLabel').textContent=viewYear+'년 '+(viewMonth+1)+'월';const first=new Date(viewYear,viewMonth,1),last=new Date(viewYear,viewMonth+1,0),todayStr=today();const dotMap={};[...events.filter(e=>e.date&&e.date.startsWith(viewYear+'-'+String(viewMonth+1).padStart(2,'0'))).map(e=>({d:parseInt(e.date.slice(8)),c:catColor(e.cat)})),...todos.filter(t=>t.due&&t.due.startsWith(viewYear+'-'+String(viewMonth+1).padStart(2,'0'))).map(t=>({d:parseInt(t.due.slice(8)),c:catColor(t.cat)}))].forEach(({d,c})=>{if(!dotMap[d])dotMap[d]=[];dotMap[d].push(c);});let html=DOW.map(d=>'<div class="cal-dow">'+d+'</div>').join('');for(let i=0;i<first.getDay();i++)html+='<div class="cal-day other-month"><span class="day-num"></span></div>';for(let d=1;d<=last.getDate();d++){const ds=viewYear+'-'+String(viewMonth+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');const dow=(first.getDay()+d-1)%7;const dots=(dotMap[d]||[]).slice(0,4).map(c=>'<div class="dot" style="background:'+c+'"></div>').join('');html+='<div class="cal-day '+(ds===todayStr?'today':'')+' '+(dow===0?'sun':'')+' '+(dow===6?'sat':'')+'" onclick="openModal(\''+ds+'\')"><span class="day-num">'+d+'</span><div class="dot-row">'+dots+'</div></div>';}document.getElementById('calGrid').innerHTML=html;renderMonthEvents();}
+function renderMonthEvents(){const pfx=viewYear+'-'+String(viewMonth+1).padStart(2,'0');const all=[...events.filter(e=>e.date&&e.date.startsWith(pfx)).map(e=>({...e,_t:'event'})),...todos.filter(t=>t.due&&t.due.startsWith(pfx)).map(t=>({id:t.id,date:t.due,title:t.text,cat:t.cat,note:t.company||'',_t:'todo'}))].sort((a,b)=>a.date.localeCompare(b.date));const el=document.getElementById('monthEvents');if(!all.length){el.innerHTML='<div class="no-events">이번 달 일정이 없어요</div>';return;}el.innerHTML=all.map(e=>{const o=new Date(e.date+'T00:00:00'),mm=o.getMonth()+1,dd=o.getDate(),dw=DOW[o.getDay()];return'<div class="month-event-item"><div class="me-date"><div class="md">'+mm+'/'+dd+'</div><div style="font-size:10px;color:var(--sub)">'+dw+'</div></div><div class="me-dot" style="background:'+catColor(e.cat)+'"></div><div class="me-body"><div class="me-title">'+esc(e.title)+'</div>'+(e.note?'<div class="me-sub">'+esc(e.note)+'</div>':'')+'</div><span class="cat-badge cat-'+e.cat+'" style="font-size:10px">'+e.cat+'</span>'+(e._t==='event'?'<button class="me-del" onclick="deleteEvent('+e.id+')">✕</button>':'')+'</div>';}).join('');}
+function openModal(ds){document.getElementById('mDate').value=ds||today();document.getElementById('mTitle').value='';document.getElementById('mNote').value='';document.getElementById('modalOverlay').style.display='flex';setTimeout(()=>document.getElementById('mTitle').focus(),100);}
+function closeModal(){document.getElementById('modalOverlay').style.display='none';}
+function closeModalOutside(e){if(e.target===document.getElementById('modalOverlay'))closeModal();}
+function saveMonthEvent(){const title=document.getElementById('mTitle').value.trim(),date=document.getElementById('mDate').value;if(!title||!date)return;events.push({id:Date.now(),title,date,cat:document.getElementById('mCat').value,note:document.getElementById('mNote').value.trim()});saveEv();closeModal();renderCalendar();}
+function deleteEvent(id){events=events.filter(e=>e.id!==id);saveEv();renderCalendar();}
+document.getElementById('todoInput').addEventListener('keydown',e=>{if(e.key==='Enter')addTodo();});
+let apiKey=localStorage.getItem('claude_api_key')||'';
+let aiHistory=[];
+(function(){if(apiKey){document.getElementById('apiKeyInput').value='••••••••';document.getElementById('aiKeyArea').style.display='none';}})();
+function saveApiKey(){const v=document.getElementById('apiKeyInput').value.trim();if(!v)return;apiKey=v;localStorage.setItem('claude_api_key',v);document.getElementById('aiKeyArea').style.display='none';addAiMsg('assistant','✅ API 키가 저장됐어요! 이제 수정사항을 말씀해 주세요.');}
+function addAiMsg(role,text){const box=document.getElementById('aiMessages');const div=document.createElement('div');div.className='ai-msg '+role;div.textContent=text;box.appendChild(div);box.scrollTop=box.scrollHeight;return div;}
+async function sendToAI(){if(!apiKey){document.getElementById('aiKeyArea').style.display='flex';addAiMsg('assistant','먼저 Anthropic API 키를 입력해 주세요!');return;}const inp=document.getElementById('aiInput');const userMsg=inp.value.trim();if(!userMsg)return;inp.value='';addAiMsg('user',userMsg);const btn=document.getElementById('aiSendBtn');btn.disabled=true;const thinking=addAiMsg('thinking','✨ 수정 중...');const currentHTML=document.documentElement.outerHTML;const sys='You are an AI assistant that modifies a Korean todo/planner web app. Respond with ONLY a complete modified HTML file. No markdown, no code fences. Preserve all functionality including the AI bar. Keep API key in localStorage under claude_api_key. Start with <!DOCTYPE html>.';aiHistory.push({role:'user',content:'Current HTML:\n'+currentHTML+'\n\nRequested change: '+userMsg});try{const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:8000,system:sys,messages:aiHistory})});const data=await res.json();if(data.error){thinking.remove();addAiMsg('assistant','❌ 오류: '+data.error.message);btn.disabled=false;return;}const newHTML=data.content.map(c=>c.text||'').join('').trim();aiHistory.push({role:'assistant',content:newHTML});thinking.remove();if(newHTML.includes('<!DOCTYPE')||newHTML.includes('<html')){addAiMsg('assistant','✅ 수정 완료! 페이지를 업데이트했어요.');setTimeout(()=>{document.open();document.write(newHTML);document.close();},600);}else{addAiMsg('assistant',newHTML||'완료!');}}catch(e){thinking.remove();addAiMsg('assistant','❌ 오류: '+e.message);}btn.disabled=false;}
+document.getElementById('aiInput').addEventListener('keydown',e=>{if(e.key==='Enter')sendToAI();});
+render();renderCalendar();
+</script>
+</body>
+</html>
