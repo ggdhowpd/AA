@@ -368,7 +368,6 @@ body{font-family:'Pretendard',system-ui,sans-serif;color:var(--text);background:
         </div>
         <div class="field-row" id="coRow">
           <input class="inp inp-sm" id="coInp" type="text" placeholder="🏢 회사명" style="flex:1" />
-          <input class="inp inp-sm" id="asInp" type="text" placeholder="👤 담당자" style="flex:1" />
         </div>
         <div class="field-row" id="timeRow" style="display:none">
           <input class="inp inp-sm" type="time" id="startInp" style="flex:1" />
@@ -637,14 +636,13 @@ function addTodo(){
     priority:todoPri, color:'',
     desc:document.getElementById('descInp').value.trim()||'',
     company:   todoCat==='업무'?(document.getElementById('coInp').value.trim()||''):'',
-    assign:    todoCat==='업무'?(document.getElementById('asInp').value.trim()||''):'',
     startTime: isMeeting?(document.getElementById('startInp').value||''):'',
     endTime:   isMeeting?(document.getElementById('endInp').value||''):'',
     location:  isMeeting?(document.getElementById('locInp').value.trim()||''):'',
     done:false
   });
   inp.value='';
-  ['dueInp','coInp','asInp','startInp','endInp','locInp','descInp'].forEach(function(id){ var el=document.getElementById(id); if(el) el.value=''; });
+  ['dueInp','coInp','startInp','endInp','locInp','descInp'].forEach(function(id){ var el=document.getElementById(id); if(el) el.value=''; });
   document.getElementById('descRow').style.display='none';
   document.getElementById('descToggle').style.color='';
   saveTodos(); renderAll();
@@ -676,7 +674,6 @@ function renderTodos(){
       +'<div class="todo-meta">'
         +'<span class="badge b-'+t.cat+'">'+t.cat+'</span>'
         +(t.company?'<span class="badge b-co">🏢 '+esc(t.company)+'</span>':'')
-        +(t.assign?'<span class="badge b-as">👤 '+esc(t.assign)+'</span>':'')
         +(timeStr?'<span class="badge b-time">🕐 '+esc(timeStr)+'</span>':'')
         +(t.location?'<span class="badge b-loc">📍 '+esc(t.location)+'</span>':'')
         +(t.cat==='assign'&&t.due?'<span class="badge b-wk">📅 주간</span>':'')
@@ -809,7 +806,7 @@ function clickCalDay(ds){
   if(!dayTodos.length){ el.innerHTML='<div style="text-align:center;padding:20px;color:var(--text3);font-size:12px">이 날 일정이 없어요</div>'; }
   else { el.innerHTML=dayTodos.map(function(t){
     var col=itemColor(t), timeStr=t.startTime?(t.startTime+(t.endTime?' – '+t.endTime:'')):''
-    var sub=[]; if(timeStr) sub.push('🕐 '+timeStr); if(t.location) sub.push('📍 '+t.location); if(t.cat==='assign') sub.push('📌 주간 배치'); if(t.company) sub.push('🏢 '+t.company); if(t.assign) sub.push('👤 '+t.assign);
+    var sub=[]; if(timeStr) sub.push('🕐 '+timeStr); if(t.location) sub.push('📍 '+t.location); if(t.cat==='assign') sub.push('📌 주간 배치'); if(t.company) sub.push('🏢 '+t.company);
     return '<div style="display:flex;align-items:flex-start;gap:8px;padding:10px 12px;background:var(--surface2);border-radius:9px;border-left:3px solid '+col+'">'
       +'<div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:600;margin-bottom:3px'+(t.done?';text-decoration:line-through;opacity:.5':'')+'">'+esc(t.text)+'</div>'
       +(t.desc?'<div style="font-size:10px;color:var(--text3);margin-bottom:4px;line-height:1.45">'+esc(t.desc)+'</div>':'')
