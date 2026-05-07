@@ -49,24 +49,24 @@ html,body{height:100%;font-family:'Inter','Segoe UI',sans-serif;background:var(-
 .panel{display:flex;flex-direction:column;border-right:1px solid var(--border);min-height:0}
 .panel:last-child{border-right:none}
 
-.ph{padding:20px 24px 16px;border-bottom:1px solid var(--border);flex-shrink:0}
-.ph-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-.ph-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.6rem}
+.ph{padding:22px 26px 18px;border-bottom:1px solid var(--border);flex-shrink:0}
+.ph-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.ph-icon{width:58px;height:58px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:2rem}
 .ph-icon.c1{background:linear-gradient(135deg,#D04A02,#FF6B00)}
 .ph-icon.c2{background:linear-gradient(135deg,#5B52D6,#9274E8)}
-.ph-tag{font-size:.58rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--o1);background:#FFF0E8;border:1px solid #F5C9AA;border-radius:5px;padding:3px 7px}
-.ph-name{font-size:.95rem;font-weight:800;letter-spacing:-.3px;margin-bottom:2px}
-.ph-sub{font-size:.69rem;color:var(--muted)}
+.ph-tag{font-size:.62rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--o1);background:#FFF0E8;border:1px solid #F5C9AA;border-radius:5px;padding:4px 9px}
+.ph-name{font-size:1.1rem;font-weight:800;letter-spacing:-.3px;margin-bottom:3px}
+.ph-sub{font-size:.75rem;color:var(--muted)}
 
-.pb{flex:1;padding:16px 24px;display:flex;flex-direction:column;gap:12px;overflow:hidden}
+.pb{flex:1;padding:18px 26px;display:flex;flex-direction:column;gap:14px;overflow:hidden}
 
-.p-summary{font-size:.77rem;color:#3A1E08;line-height:1.6;padding-left:9px;border-left:2px solid var(--o1)}
+.p-summary{font-size:.84rem;color:#3A1E08;line-height:1.65;padding-left:10px;border-left:2px solid var(--o1)}
 
-.p-feats{display:flex;flex-direction:column;gap:7px}
-.p-feat{display:flex;align-items:flex-start;gap:7px;font-size:.76rem;color:#3A1E08;line-height:1.4}
-.p-ck{width:15px;height:15px;flex-shrink:0;background:linear-gradient(135deg,var(--o1),var(--o2));border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:.44rem;color:#fff;font-weight:900;margin-top:1px}
+.p-feats{display:flex;flex-direction:column;gap:9px}
+.p-feat{display:flex;align-items:flex-start;gap:8px;font-size:.83rem;color:#3A1E08;line-height:1.45}
+.p-ck{width:17px;height:17px;flex-shrink:0;background:linear-gradient(135deg,var(--o1),var(--o2));border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:.48rem;color:#fff;font-weight:900;margin-top:1px}
 
-.p-cta{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,var(--o1),var(--o2));color:#fff;border-radius:8px;padding:8px 16px;font-size:.75rem;font-weight:700;text-decoration:none;box-shadow:0 4px 12px rgba(200,70,0,.22);transition:transform .15s,box-shadow .15s;align-self:flex-start;margin-top:auto}
+.p-cta{display:inline-flex;align-items:center;gap:7px;background:linear-gradient(135deg,var(--o1),var(--o2));color:#fff;border-radius:9px;padding:10px 22px;font-size:.84rem;font-weight:700;text-decoration:none;box-shadow:0 4px 12px rgba(200,70,0,.22);transition:transform .15s,box-shadow .15s;align-self:flex-start;margin-top:auto}
 .p-cta:hover{transform:translateY(-1px);box-shadow:0 7px 18px rgba(200,70,0,.32)}
 .arr{transition:transform .15s}
 .p-cta:hover .arr{transform:translateX(3px)}
@@ -144,16 +144,16 @@ html,body{height:100%;font-family:'Inter','Segoe UI',sans-serif;background:var(-
           <span class="ph-tag">업무 최적화</span>
         </div>
         <div class="ph-name">Smart Schedule</div>
-        <div class="ph-sub">실무 및 일정 통합관리 플래너</div>
+        <div class="ph-sub">업무 및 일정 통합관리 플래너</div>
       </div>
       <div class="pb">
         <p class="p-summary">Assign·To-Do·일정을 하나의 화면에서 통합 관리합니다.</p>
         <div class="p-feats">
           <div class="p-feat"><div class="p-ck">✓</div>Assign 주별 내재 구조 — 주차 자동 구분으로 업무 흐름 반영</div>
-          <div class="p-feat"><div class="p-ck">✓</div>Drag &amp; Drop 우선순위 조정 — 상황 변화에 즉시 대응</div>
+          <div class="p-feat"><div class="p-ck">✓</div>Drag &amp; Drop 우선순위 조정 — D-day 3 이내의 업무는 '긴급'으로 자동 배치</div>
           <div class="p-feat"><div class="p-ck">✓</div>회의 및 약속의 경우 시간, 장소, 설명 등 상세 입력 지원</div>
-          <div class="p-feat"><div class="p-ck">✓</div>D-Day 긴급도 자동 하이라이트 + 담당 태그 관리</div>
-          <div class="p-feat"><div class="p-ck">✓</div>누적 진행률 표기 및 응원의 메시지로 달성 독려, 통계 조회 기능 제공</div>
+          <div class="p-feat"><div class="p-ck">✓</div>색상, 위젯 구성 커스터마이징 기능 탑재</div>
+          <div class="p-feat"><div class="p-ck">✓</div>누적 진행률 표기 및 응원의 메시지로 달성 독려, 통계 조회 및 추출(.xlsx) 기능 제공</div>
         </div>
         <a class="p-cta" href="SmartSchedule.html">도구 열기 <span class="arr">→</span></a>
       </div>
