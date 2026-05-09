@@ -63,10 +63,14 @@ html,body{height:100%;font-family:'Inter','Segoe UI',sans-serif;background:var(-
 .p-feat{display:flex;align-items:flex-start;gap:8px;font-size:.83rem;color:#3A1E08;line-height:1.45}
 .p-ck{width:17px;height:17px;flex-shrink:0;background:linear-gradient(135deg,var(--o1),var(--o2));border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:.48rem;color:#fff;font-weight:900;margin-top:1px}
 
-.p-cta{display:inline-flex;align-items:center;gap:9px;background:linear-gradient(135deg,var(--o1),var(--o2));color:#fff;border-radius:12px;padding:15px 33px;font-size:1.1rem;font-weight:700;text-decoration:none;box-shadow:0 4px 12px rgba(200,70,0,.22);transition:transform .15s,box-shadow .15s;align-self:flex-start;margin-top:auto}
+.p-actions{display:flex;flex-direction:column;gap:8px;margin-top:auto}
+.p-cta{display:inline-flex;align-items:center;gap:9px;background:linear-gradient(135deg,var(--o1),var(--o2));color:#fff;border-radius:12px;padding:15px 33px;font-size:1.1rem;font-weight:700;text-decoration:none;box-shadow:0 4px 12px rgba(200,70,0,.22);transition:transform .15s,box-shadow .15s;align-self:flex-start}
 .p-cta:hover{transform:translateY(-1px);box-shadow:0 7px 18px rgba(200,70,0,.32)}
 .arr{transition:transform .15s}
 .p-cta:hover .arr{transform:translateX(3px)}
+.p-codelink{display:inline-flex;align-items:center;gap:6px;font-size:.72rem;font-weight:600;color:var(--muted);text-decoration:none;align-self:flex-start;padding:5px 0;border-bottom:1px solid transparent;transition:color .15s,border-color .15s}
+.p-codelink:hover{color:var(--o1);border-bottom-color:var(--o1)}
+.p-codelink svg{flex-shrink:0}
 
 .p-note{font-size:.7rem;color:var(--muted);border-top:1px dashed var(--border);padding-top:10px;margin-top:2px}
 .p-note-label{font-weight:700;color:#BFA090;margin-right:4px}
@@ -131,7 +135,13 @@ html,body{height:100%;font-family:'Inter','Segoe UI',sans-serif;background:var(-
           <div class="p-feat"><div class="p-ck">✓</div>헷갈리는 항목에 해설 제공 — 해당 단락 역할 및 존재 이유 안내</div>
           <div class="p-feat"><div class="p-ck">✓</div>클라이언트별 맞춤 항목 설정 및 완성 초안 다운로드 지원</div>
         </div>
-        <a class="p-cta" href="MRLdraft">도구 열기 <span class="arr">→</span></a>
+        <div class="p-actions">
+          <a class="p-cta" href="MRLdraft">도구 열기 <span class="arr">→</span></a>
+          <a class="p-codelink" href="https://github.com/ggdhowpd/AA/blob/main/MRLdraft.html" target="_blank">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+            Codebase Link
+          </a>
+        </div>
         <p class="p-note"><span class="p-note-label">개선 예정</span>배포 시 원본 Word 파일 링크 수정</p>
       </div>
     </div>
@@ -148,13 +158,19 @@ html,body{height:100%;font-family:'Inter','Segoe UI',sans-serif;background:var(-
       <div class="pb">
         <p class="p-summary">Assign·To-Do·일정을 하나의 화면에서 통합 관리합니다.</p>
         <div class="p-feats">
-          <div class="p-feat"><div class="p-ck">✓</div>Assign 주별 내재 구조 — 주차 자동 구분으로 업무 흐름 반영</div>
+          <div class="p-feat"><div class="p-ck">✓</div>색상, 위젯 구성 커스터마이징 기능 탑재</div>
           <div class="p-feat"><div class="p-ck">✓</div>Drag &amp; Drop 우선순위 조정 — D-day 3 이내의 업무는 '긴급'으로 자동 배치</div>
           <div class="p-feat"><div class="p-ck">✓</div>회의 및 약속의 경우 시간, 장소, 설명 등 상세 입력 지원</div>
-          <div class="p-feat"><div class="p-ck">✓</div>색상, 위젯 구성 커스터마이징 기능 탑재</div>
+          <div class="p-feat"><div class="p-ck">✓</div>Assign 주별 내재 구조 — 주차 자동 구분으로 업무 흐름 반영</div>
           <div class="p-feat"><div class="p-ck">✓</div>누적 진행률 표기 및 응원의 메시지로 달성 독려, 통계 조회 및 추출(.xlsx) 기능 제공</div>
         </div>
-        <a class="p-cta" href="SmartSchedule.html">도구 열기 <span class="arr">→</span></a>
+        <div class="p-actions">
+          <a class="p-cta" href="SmartSchedule.html">도구 열기 <span class="arr">→</span></a>
+          <a class="p-codelink" href="https://github.com/ggdhowpd/AA/blob/main/SmartSchedule.html" target="_blank">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+            Codebase Link
+          </a>
+        </div>
         <p class="p-note"><span class="p-note-label">개선 예정</span>PwC 내부 링크 연동 기능 (TalentLink, Outlook 등)</p>
       </div>
     </div>
